@@ -85,10 +85,16 @@ window.SITE = {
   },
 
   /* ==========================================================
-     목록 위 카테고리 버튼 (이 순서대로 보여요)
+     목록 위 제품군 버튼 (첫 번째 줄, 이 순서대로 보여요)
      ========================================================== */
   categories: {
     marketing: ["LIVING", "K-BEAUTY", "F&B", "FASHION", "PET"],
+    local: []
+  },
+
+  /* 작업 형태 버튼 (두 번째 줄). 작업마다 types 에 하나 이상 적어요. */
+  types: {
+    marketing: ["광고 영상", "광고 이미지", "카드뉴스", "상세페이지"],
     local: []
   },
 
@@ -97,30 +103,30 @@ window.SITE = {
      ----------------------------------------------------------
      id       : work 폴더 안 HTML 파일 이름과 똑같이 (예: crassiang → work/crassiang.html)
      cat      : "marketing" 또는 "local"
-     category : 위 categories 에 적은 이름 중 하나
+     category : 위 categories 에 적은 이름 중 하나 (제품군)
+     types    : 위 types 에 적은 이름들 (작업 형태, 여러 개 가능) 예) ["광고 영상", "카드뉴스"]
      name     : 카드에 보일 이름
-     tags     : 분야 (카드 아래 「브랜드 | 분야」로 보여요)
      cover    : 썸네일 (가로 16:10 추천)
      featured : true 면 홈 대표 작업 줄에 나와요
      위에 있을수록 먼저 보여요.
      ========================================================== */
   works: [
-    { id: "crassiang",        cat: "marketing", category: "FASHION",  name: "크라시앙", tags: ["META 광고 소재"], cover: "", featured: true },
-    { id: "makeon",           cat: "marketing", category: "K-BEAUTY", name: "메이크온", tags: ["META 광고 소재"], cover: "", featured: true },
-    { id: "risanghoe",        cat: "marketing", category: "F&B",      name: "리상회",   tags: ["촬영", "광고 소재"], cover: "", featured: true },
-    { id: "tiptoe",           cat: "marketing", category: "K-BEAUTY", name: "팁토우",   tags: ["촬영", "광고 소재"], cover: "", featured: true },
-    { id: "cruntin",          cat: "marketing", category: "F&B",      name: "크런틴",   tags: ["촬영", "광고 소재"], cover: "", featured: true },
-    { id: "rebeat",           cat: "marketing", category: "LIVING",   name: "리비트",   tags: ["META 광고 소재"], cover: "", featured: true },
-    { id: "labnosh",          cat: "marketing", category: "F&B",      name: "랩노쉬",   tags: ["META 광고 소재"], cover: "", featured: true },
-    { id: "hankki-tongsal",   cat: "marketing", category: "F&B",      name: "한끼통살", tags: ["촬영", "광고 소재"], cover: "", featured: false },
-    { id: "ohora",            cat: "marketing", category: "K-BEAUTY", name: "오호라",   tags: ["META 광고 소재"], cover: "", featured: false },
-    { id: "bodylove",         cat: "marketing", category: "LIVING",   name: "바디럽",   tags: ["META 광고 소재"], cover: "", featured: true },
-    { id: "3boon1",           cat: "marketing", category: "LIVING",   name: "삼분의일", tags: ["META 광고 소재"], cover: "", featured: false },
-    { id: "marketolsen",      cat: "marketing", category: "LIVING",   name: "마켓올슨", tags: ["META 광고 소재"], cover: "", featured: false },
-    { id: "mooming",          cat: "marketing", category: "PET",      name: "무밍",     tags: ["META 광고 소재"], cover: "", featured: false },
-    { id: "wrapping-charlie", cat: "marketing", category: "PET",      name: "래핑찰리", tags: ["META 광고 소재"], cover: "", featured: false },
+    { id: "crassiang",        cat: "marketing", category: "FASHION",  name: "크라시앙", types: [], cover: "", featured: true },
+    { id: "makeon",           cat: "marketing", category: "K-BEAUTY", name: "메이크온", types: [], cover: "", featured: true },
+    { id: "risanghoe",        cat: "marketing", category: "F&B",      name: "리상회",   types: ["광고 영상"], cover: "", featured: true },
+    { id: "tiptoe",           cat: "marketing", category: "K-BEAUTY", name: "팁토우",   types: ["광고 영상"], cover: "", featured: true },
+    { id: "cruntin",          cat: "marketing", category: "F&B",      name: "크런틴",   types: ["광고 영상"], cover: "", featured: true },
+    { id: "rebeat",           cat: "marketing", category: "LIVING",   name: "리비트",   types: [], cover: "", featured: true },
+    { id: "labnosh",          cat: "marketing", category: "F&B",      name: "랩노쉬",   types: [], cover: "", featured: true },
+    { id: "hankki-tongsal",   cat: "marketing", category: "F&B",      name: "한끼통살", types: ["광고 영상"], cover: "", featured: false },
+    { id: "ohora",            cat: "marketing", category: "K-BEAUTY", name: "오호라",   types: [], cover: "", featured: false },
+    { id: "bodylove",         cat: "marketing", category: "LIVING",   name: "바디럽",   types: [], cover: "", featured: true },
+    { id: "3boon1",           cat: "marketing", category: "LIVING",   name: "삼분의일", types: [], cover: "", featured: false },
+    { id: "marketolsen",      cat: "marketing", category: "LIVING",   name: "마켓올슨", types: [], cover: "", featured: false },
+    { id: "mooming",          cat: "marketing", category: "PET",      name: "무밍",     types: [], cover: "", featured: false },
+    { id: "wrapping-charlie", cat: "marketing", category: "PET",      name: "래핑찰리", types: [], cover: "", featured: false },
 
-    { id: "yecheon-market",   cat: "local",     name: "[로컬 프로젝트]", tags: ["[분야]"], cover: "", featured: false }
+    { id: "yecheon-market",   cat: "local",     name: "[로컬 프로젝트]", types: [], cover: "", featured: false }
   ],
 
   /* ==========================================================

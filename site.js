@@ -25,10 +25,11 @@
   function $(sel, el) { return (el || document).querySelector(sel); }
   function workHref(w) { return R + "work/" + encodeURIComponent(w.id) + ".html"; }
   function card(w) {
-    return '<a class="card" href="' + workHref(w) + '" data-tags="' + esc((w.tags || []).join("|")) + '">' +
+    var sub = [w.category].concat(w.types || w.tags || []).filter(Boolean);
+    return '<a class="card" href="' + workHref(w) + '" data-c="' + esc(w.category || "") + '" data-t="' + esc((w.types || []).join("|")) + '">' +
       '<div class="thumb">' + img(w.cover, w.name) + "</div>" +
       '<div class="cap"><span>' + t(w.name) + "</span>" +
-      ((w.tags || []).length ? '<span class="sep"></span><span class="tag">' + esc(w.tags.join(" & ")) + "</span>" : "") +
+      (sub.length ? '<span class="sep"></span><span class="tag">' + sub.map(t).join(" · ") + "</span>" : "") +
       "</div></a>";
   }
   function services(list) {
@@ -105,15 +106,23 @@
   if (page === "marketing" || page === "local") {
     var list = works.filter(function (w) { return w.cat === page; });
     var cats = ((S.categories || {})[page] || []).slice();
-    list.forEach(function (w) { if (w.category && cats.indexOf(w.category) < 0) cats.push(w.category); });
+    var types = ((S.types || {})[page] || []).slice();
+    list.forEach(function (w) {
+      if (w.category && cats.indexOf(w.category) < 0) cats.push(w.category);
+      (w.types || []).forEach(function (x) { if (types.indexOf(x) < 0) types.push(x); });
+    });
     function slug(s) { return String(s).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-|-$/g, ""); }
+    function row(kind, label, items) {
+      return '<div class="filter-row" role="group" aria-label="' + label + '"><span class="filter-label">' + label + "</span>" +
+        '<button class="on" data-k="' + kind + '" data-v="" aria-pressed="true">All</button>' +
+        items.map(function (x) { return '<button data-k="' + kind + '" data-v="' + esc(x) + '" aria-pressed="false">' + esc(x) + "</button>"; }).join("") + "</div>";
+    }
     main.innerHTML =
       '<section class="page-head wrap"><h1>' + CATS[page].title + '</h1><p class="sub">' + CATS[page].ko + "</p></section>" +
-      (cats.length ? '<div class="filters wrap" role="group" aria-label="카테고리"><button class="on" data-c="" aria-pressed="true">All</button>' +
-        cats.map(function (x) { return '<button data-c="' + esc(x) + '" aria-pressed="false">' + esc(x) + "</button>"; }).join("") + "</div>" : "") +
-      (list.length ? '<section class="grid wrap">' + list.map(function (w) {
-        return card(w).replace('<a class="card"', '<a class="card" data-c="' + esc(w.category || "") + '"');
-      }).join("") + '</section><p class="empty wrap" id="none" hidden>이 카테고리에는 아직 작업이 없어요.</p>' : '<p class="empty wrap">아직 올린 작업이 없어요.</p>');
+      (cats.length || types.length ? '<div class="filters wrap">' +
+        (cats.length ? row("c", "Category", cats) : "") + (types.length ? row("t", "Type", types) : "") + "</div>" : "") +
+      (list.length ? '<section class="grid wrap">' + list.map(card).join("") +
+        '</section><p class="empty wrap" id="none" hidden>이 조건에 맞는 작업이 아직 없어요.</p>' : '<p class="empty wrap">아직 올린 작업이 없어요.</p>');
 
     /* More Clients: 상세 페이지 없이 이름만 */
     var more = (S.moreClients || {})[page];
@@ -126,27 +135,39 @@
         }).join("") + "</div></section>");
     }
 
-    function pick(name) {
+    /* 두 줄 필터: 제품군(c) × 작업 형태(t) — 둘 다 맞는 작업만 보여요 */
+    var sel = { c: "", t: "" };
+    function apply() {
       var shown = 0;
-      main.querySelectorAll(".more-group").forEach(function (g) { g.hidden = !!name && g.dataset.c !== name; });
       main.querySelectorAll(".filters button").forEach(function (x) {
-        var on = x.dataset.c === name; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on);
+        var on = sel[x.dataset.k] === x.dataset.v; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on);
       });
       main.querySelectorAll(".card").forEach(function (el) {
-        var hide = !!name && el.dataset.c !== name;
-        el.classList.toggle("hide", hide); if (!hide) shown++;
+        var hide = (sel.c && el.dataset.c !== sel.c) || (sel.t && el.dataset.t.split("|").indexOf(sel.t) < 0);
+        el.classList.toggle("hide", !!hide); if (!hide) shown++;
       });
       var none = $("#none", main); if (none) none.hidden = shown > 0;
+      /* More Clients 는 제품군만 따라가고, 작업 형태를 고르면 숨겨요 (이름만 있어서 형태 정보가 없음) */
+      var m = $(".more", main); if (m) m.hidden = !!sel.t;
+      main.querySelectorAll(".more-group").forEach(function (g) { g.hidden = !!sel.c && g.dataset.c !== sel.c; });
     }
     main.addEventListener("click", function (e) {
       var b = e.target.closest(".filters button");
       if (!b) return;
-      pick(b.dataset.c);
-      history.replaceState(null, "", b.dataset.c ? "#" + slug(b.dataset.c) : location.pathname);
+      sel[b.dataset.k] = b.dataset.v;
+      apply();
+      var parts = [];
+      if (sel.c) parts.push(slug(sel.c));
+      if (sel.t) parts.push("type-" + slug(sel.t));
+      history.replaceState(null, "", parts.length ? "#" + parts.join("&") : location.pathname);
     });
-    /* 주소 끝에 #living 처럼 붙어 있으면 그 카테고리로 열기 */
-    var h = decodeURIComponent(location.hash.slice(1));
-    if (h) cats.forEach(function (x) { if (slug(x) === h) pick(x); });
+    /* 주소 끝에 #living, #type-광고-영상, #living&type-광고-영상 처럼 붙어 있으면 그대로 열기 */
+    decodeURIComponent(location.hash.slice(1)).split("&").forEach(function (h) {
+      if (!h) return;
+      if (h.indexOf("type-") === 0) types.forEach(function (x) { if ("type-" + slug(x) === h) sel.t = x; });
+      else cats.forEach(function (x) { if (slug(x) === h) sel.c = x; });
+    });
+    if (sel.c || sel.t) apply();
   }
 
   /* ---------- 작업 상세: 이전 / 다음 ---------- */

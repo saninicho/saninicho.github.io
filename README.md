@@ -39,15 +39,19 @@ CNAME             www.studiochorok.com 연결 — 지우거나 고치지 마세�
 4. 제목 · 정보 · 설명 · 사진을 채워요.
 5. `data.js` 의 `works` 목록에 한 줄 추가해요.
    ```js
-   { id: "작업이름", cat: "marketing", category: "LIVING", name: "브랜드명", tags: ["분야"], cover: "images/marketing/작업이름/cover.jpg", featured: true },
+   { id: "작업이름", cat: "marketing", category: "LIVING", types: ["광고 이미지"], name: "브랜드명", cover: "images/marketing/작업이름/cover.jpg", featured: true },
    ```
-   `category` 는 마케팅 목록 위 카테고리 버튼(LIVING · K-BEAUTY · F&D) 중 하나예요.
+   `category` 는 제품군, `types` 는 작업 형태예요 (아래 「필터 두 줄」 참고).
    `featured: true` 면 홈 대표 작업 줄에도 나와요.
 
-## 카테고리 바꾸기
+## 필터 두 줄 (제품군 · 작업 형태)
 
-`data.js` 의 `categories` 에서 이름을 더하거나 빼면 마케팅 목록 위 버튼이 바뀌어요.
-주소 끝에 `#living`, `#k-beauty`, `#fandd` 를 붙이면 그 카테고리가 선택된 채로 열려요.
+마케팅 목록 위에 버튼이 두 줄 있어요. 둘 다 고르면 둘 다 맞는 작업만 보여요.
+- **Category (제품군):** `data.js` 의 `categories` — LIVING · K-BEAUTY · F&B · FASHION · PET
+- **Type (작업 형태):** `data.js` 의 `types` — 광고 영상 · 광고 이미지 · 카드뉴스 · 상세페이지
+
+작업마다 `category: "LIVING"` 하나와 `types: ["광고 영상", "카드뉴스"]` 처럼 형태를 여러 개 적어요.
+주소 끝에 `#living`, `#type-광고-영상`, `#living&type-광고-영상` 을 붙이면 그 조건으로 열려요.
 
 ## 사진관 사진 추가
 
