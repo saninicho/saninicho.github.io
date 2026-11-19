@@ -260,3 +260,33 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .about-text p { font-size: 19px; }
   .site-footer .wrap { flex-direction: row; justify-content: space-between; }
 }
+
+/* ---------- More Clients ---------- */
+.more { padding-bottom: 96px; }
+.more-title { font-size: 24px; font-weight: 400; text-transform: uppercase; border-top: 1px solid var(--ink); padding-top: 18px; margin-bottom: 24px; }
+.more-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 16px; }
+.more-cat { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.more-group ul, .skills ul { list-style: none; font-family: var(--ko); font-size: 14px; line-height: 1.9; }
+.more-group[hidden] { display: none; }
+
+/* ---------- 소개: 경력 · 스킬 ---------- */
+.about-block { margin-top: 56px; }
+.exp-list { list-style: none; border-top: 1px solid var(--ink); }
+.exp-list li { display: grid; grid-template-columns: 1fr; gap: 2px; padding: 14px 0; border-bottom: 1px solid var(--line); font-family: var(--ko); font-size: 15px; }
+.exp-list .period { font-family: var(--font); font-size: 12px; color: var(--muted); letter-spacing: .02em; }
+.exp-list .note { display: block; font-size: 13px; color: var(--muted); }
+.skills { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 16px; border-top: 1px solid var(--ink); padding-top: 16px; }
+
+@media (min-width: 600px) {
+  .more-grid { grid-template-columns: repeat(3, 1fr); }
+  .exp-list li { grid-template-columns: 150px 1fr; gap: 16px; }
+  .skills { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 900px) {
+  .more { padding-bottom: 140px; }
+  .more-title { font-size: 32px; }
+  .more-grid { grid-template-columns: repeat(6, 1fr); }
+}
+.sec-meta { margin-top: 8px; font-size: 13px; color: var(--muted); font-family: var(--ko); }
+.about .brand-list { grid-template-columns: 1fr 1fr; }
+@media (min-width: 900px) { .about .brand-list { grid-template-columns: repeat(3, 1fr); } }

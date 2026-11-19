@@ -95,7 +95,10 @@
       '<section class="contact-sec wrap reveal"><p class="eyebrow">Contact</p><p class="contact-big">' +
         (c.email ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + "</a>" : '<span class="todo">[이메일 주소]</span>') +
         (c.instagram ? '<br><a href="https://instagram.com/' + esc(c.instagram) + '" target="_blank" rel="noopener">@' + esc(c.instagram) + "</a>" : "") +
-      '</p><p class="contact-meta">' + esc(c.address) + "</p></section>";
+      '</p><p class="contact-meta">' + [
+        c.phone ? '<a href="tel:' + esc(c.phone) + '">' + esc(c.phone) + "</a>" : "",
+        esc(c.address), esc(c.business)
+      ].filter(Boolean).join("<br>") + "</p></section>";
   }
 
   /* ---------- 마케팅 / 로컬 목록 ---------- */
@@ -112,8 +115,20 @@
         return card(w).replace('<a class="card"', '<a class="card" data-c="' + esc(w.category || "") + '"');
       }).join("") + '</section><p class="empty wrap" id="none" hidden>이 카테고리에는 아직 작업이 없어요.</p>' : '<p class="empty wrap">아직 올린 작업이 없어요.</p>');
 
+    /* More Clients: 상세 페이지 없이 이름만 */
+    var more = (S.moreClients || {})[page];
+    if (more && Object.keys(more).length) {
+      main.insertAdjacentHTML("beforeend",
+        '<section class="more wrap reveal"><h2 class="more-title">More Clients</h2><div class="more-grid">' +
+        Object.keys(more).map(function (k) {
+          return '<div class="more-group" data-c="' + esc(k) + '"><p class="more-cat">' + esc(k) + "</p><ul>" +
+            more[k].map(function (n) { return "<li>" + t(n) + "</li>"; }).join("") + "</ul></div>";
+        }).join("") + "</div></section>");
+    }
+
     function pick(name) {
       var shown = 0;
+      main.querySelectorAll(".more-group").forEach(function (g) { g.hidden = !!name && g.dataset.c !== name; });
       main.querySelectorAll(".filters button").forEach(function (x) {
         var on = x.dataset.c === name; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on);
       });
@@ -170,15 +185,26 @@
     ];
     if (c.phone) rows.push(["Phone", '<a href="tel:' + esc(c.phone) + '">' + esc(c.phone) + "</a>"]);
     if (c.address) rows.push(["Studio", esc(c.address) + (c.naverMap ? ' &nbsp;<a href="' + esc(c.naverMap) + '" target="_blank" rel="noopener">지도</a>' : "")]);
+    if (c.business) rows.push(["Business", esc(c.business)]);
     main.innerHTML =
       '<section class="page-head wrap"><h1>About</h1><p class="sub">' + esc(S.nameKo) + "</p></section>" +
       '<section class="about wrap"><div class="about-text">' + (S.about || []).map(function (p) { return "<p>" + t(p) + "</p>"; }).join("") +
-        '<div style="margin-top:48px"><h2>What we do</h2>' + services(S.services) + "</div></div>" +
+        '<div class="about-block"><h2>What we do</h2>' + services(S.services) + "</div>" +
+        ((S.experience || []).length ? '<div class="about-block"><h2>Experience</h2><ul class="exp-list">' +
+          S.experience.map(function (x) {
+            return '<li><span class="period">' + esc(x.period) + '</span><span class="what"><b>' + esc(x.org) + "</b> " + esc(x.role) +
+              (x.note ? '<span class="note">' + esc(x.note) + "</span>" : "") + "</span></li>";
+          }).join("") + "</ul></div>" : "") +
+        "</div>" +
         '<div><div id="contact"><h2>Contact</h2><ul class="contact-list">' +
           rows.map(function (r) { return '<li><span class="k">' + r[0] + '</span><span class="v">' + r[1] + "</span></li>"; }).join("") +
         "</ul></div>" +
-        ((S.brands || []).length ? '<div style="margin-top:48px"><h2>Brands we worked with</h2><ul class="contact-list">' +
-          S.brands.map(function (b) { return '<li style="grid-template-columns:1fr"><span class="v">' + t(b) + "</span></li>"; }).join("") + "</ul></div>" : "") +
+        ((S.skills || []).length ? '<div class="about-block"><h2>Skills</h2><div class="skills">' +
+          S.skills.map(function (g) {
+            return '<div><p class="more-cat">' + esc(g.title) + "</p><ul>" + g.items.map(function (n) { return "<li>" + esc(n) + "</li>"; }).join("") + "</ul></div>";
+          }).join("") + "</div></div>" : "") +
+        ((S.brands || []).length ? '<div class="about-block"><h2>Brands we worked with</h2><ul class="brand-list">' +
+          S.brands.map(function (b) { return "<li>" + t(b) + "</li>"; }).join("") + "</ul></div>" : "") +
       "</div></section>";
   }
 
