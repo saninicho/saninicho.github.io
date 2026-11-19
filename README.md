@@ -58,4 +58,4 @@ CNAME             www.studiochorok.com 연결 — 지우거나 고치지 마세�
 
 - `CNAME` 파일은 지우거나 고치지 않아요.
 - 이 저장소는 누구나 볼 수 있어요. 원본 · 개인정보 · 계약서는 올리지 말고 작업 폴더의 `materials`에만 둬요.
-- 글꼴은 무료로 상업적 사용이 가능한 것만 써요 (지금: Slabo 13px, Pretendard — 둘 다 OFL 라이선스).
+- 글꼴은 무료로 상업적 사용이 가능한 것만 써요 (지금: Kulim Park, Pretendard — 둘 다 OFL 라이선스).

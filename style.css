@@ -1,6 +1,6 @@
 /* STUDIO CHOROK — 공통 스타일 (휴대폰 기준 → 넓은 화면은 아래 @media에서) */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
-@import url("https://fonts.googleapis.com/css2?family=Slabo+13px&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Kulim+Park:wght@300;400;600&display=swap");
 
 :root {
   --green: #1ac171;
@@ -12,7 +12,7 @@
   --bg: #fff;
   --gutter: 16px;
   --max: 1440px;
-  --font: "Slabo 13px", "Pretendard", "Apple SD Gothic Neo", sans-serif;
+  --font: "Kulim Park", "Pretendard", "Apple SD Gothic Neo", sans-serif;
   --ko: "Pretendard", "Apple SD Gothic Neo", sans-serif;
 }
 
