@@ -101,21 +101,37 @@
   /* ---------- 마케팅 / 로컬 목록 ---------- */
   if (page === "marketing" || page === "local") {
     var list = works.filter(function (w) { return w.cat === page; });
-    var tags = [];
-    list.forEach(function (w) { (w.tags || []).forEach(function (x) { if (tags.indexOf(x) < 0) tags.push(x); }); });
+    var cats = ((S.categories || {})[page] || []).slice();
+    list.forEach(function (w) { if (w.category && cats.indexOf(w.category) < 0) cats.push(w.category); });
+    function slug(s) { return String(s).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-|-$/g, ""); }
     main.innerHTML =
       '<section class="page-head wrap"><h1>' + CATS[page].title + '</h1><p class="sub">' + CATS[page].ko + "</p></section>" +
-      (tags.length > 1 ? '<div class="filters wrap" role="group" aria-label="분야 거르기"><button class="on" data-t="" aria-pressed="true">All</button>' +
-        tags.map(function (x) { return '<button data-t="' + esc(x) + '" aria-pressed="false">' + esc(x) + "</button>"; }).join("") + "</div>" : "") +
-      (list.length ? '<section class="grid wrap">' + list.map(card).join("") + "</section>" : '<p class="empty wrap">아직 올린 작업이 없어요.</p>');
+      (cats.length ? '<div class="filters wrap" role="group" aria-label="카테고리"><button class="on" data-c="" aria-pressed="true">All</button>' +
+        cats.map(function (x) { return '<button data-c="' + esc(x) + '" aria-pressed="false">' + esc(x) + "</button>"; }).join("") + "</div>" : "") +
+      (list.length ? '<section class="grid wrap">' + list.map(function (w) {
+        return card(w).replace('<a class="card"', '<a class="card" data-c="' + esc(w.category || "") + '"');
+      }).join("") + '</section><p class="empty wrap" id="none" hidden>이 카테고리에는 아직 작업이 없어요.</p>' : '<p class="empty wrap">아직 올린 작업이 없어요.</p>');
+
+    function pick(name) {
+      var shown = 0;
+      main.querySelectorAll(".filters button").forEach(function (x) {
+        var on = x.dataset.c === name; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on);
+      });
+      main.querySelectorAll(".card").forEach(function (el) {
+        var hide = !!name && el.dataset.c !== name;
+        el.classList.toggle("hide", hide); if (!hide) shown++;
+      });
+      var none = $("#none", main); if (none) none.hidden = shown > 0;
+    }
     main.addEventListener("click", function (e) {
       var b = e.target.closest(".filters button");
       if (!b) return;
-      main.querySelectorAll(".filters button").forEach(function (x) { x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", x === b); });
-      main.querySelectorAll(".card").forEach(function (el) {
-        el.classList.toggle("hide", !!b.dataset.t && el.dataset.tags.split("|").indexOf(b.dataset.t) < 0);
-      });
+      pick(b.dataset.c);
+      history.replaceState(null, "", b.dataset.c ? "#" + slug(b.dataset.c) : location.pathname);
     });
+    /* 주소 끝에 #living 처럼 붙어 있으면 그 카테고리로 열기 */
+    var h = decodeURIComponent(location.hash.slice(1));
+    if (h) cats.forEach(function (x) { if (slug(x) === h) pick(x); });
   }
 
   /* ---------- 작업 상세: 이전 / 다음 ---------- */

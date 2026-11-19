@@ -39,9 +39,15 @@ CNAME             www.studiochorok.com 연결 — 지우거나 고치지 마세�
 4. 제목 · 정보 · 설명 · 사진을 채워요.
 5. `data.js` 의 `works` 목록에 한 줄 추가해요.
    ```js
-   { id: "작업이름", cat: "marketing", name: "브랜드명", tags: ["분야"], cover: "images/marketing/작업이름/cover.jpg", featured: true },
+   { id: "작업이름", cat: "marketing", category: "LIVING", name: "브랜드명", tags: ["분야"], cover: "images/marketing/작업이름/cover.jpg", featured: true },
    ```
+   `category` 는 마케팅 목록 위 카테고리 버튼(LIVING · K-BEAUTY · F&D) 중 하나예요.
    `featured: true` 면 홈 대표 작업 줄에도 나와요.
+
+## 카테고리 바꾸기
+
+`data.js` 의 `categories` 에서 이름을 더하거나 빼면 마케팅 목록 위 버튼이 바뀌어요.
+주소 끝에 `#living`, `#k-beauty`, `#fandd` 를 붙이면 그 카테고리가 선택된 채로 열려요.
 
 ## 사진관 사진 추가
 

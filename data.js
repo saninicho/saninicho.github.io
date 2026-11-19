@@ -47,20 +47,32 @@ window.SITE = {
   },
 
   /* ==========================================================
+     목록 위 카테고리 버튼 (이 순서대로 보여요)
+     ----------------------------------------------------------
+     카테고리를 더하거나 빼려면 여기 이름만 바꾸면 돼요.
+     비워두면([]) 버튼 없이 전체만 보여요.
+     ========================================================== */
+  categories: {
+    marketing: ["LIVING", "K-BEAUTY", "F&D"],
+    local: []
+  },
+
+  /* ==========================================================
      작업 목록 — 마케팅·로컬 목록과 홈 카드에 쓰여요.
      ----------------------------------------------------------
      id       : work 폴더 안 HTML 파일 이름과 똑같이 (예: brand-a → work/brand-a.html)
      cat      : "marketing" 또는 "local"
+     category : 위 categories 에 적은 이름 중 하나 (예: "LIVING")
      name     : 카드에 보일 이름
-     tags     : 분야 (목록 필터 버튼이 이걸로 자동으로 생겨요)
+     tags     : 분야 (카드 아래 「브랜드 | 분야」로 보여요)
      cover    : 썸네일 (가로 16:10 추천)
      featured : true 면 홈 대표 작업 줄에 나와요
      위에 있을수록 먼저 보여요.
      ========================================================== */
   works: [
-    { id: "brand-a", cat: "marketing", name: "BRAND A", tags: ["SNS 운영"], cover: "", featured: true },
-    { id: "brand-b", cat: "marketing", name: "BRAND B", tags: ["캠페인", "촬영"], cover: "", featured: true },
-    { id: "brand-c", cat: "marketing", name: "BRAND C", tags: ["상세페이지"], cover: "", featured: true },
+    { id: "brand-a", cat: "marketing", category: "LIVING",   name: "BRAND A", tags: ["SNS 운영"], cover: "", featured: true },
+    { id: "brand-b", cat: "marketing", category: "K-BEAUTY", name: "BRAND B", tags: ["캠페인", "촬영"], cover: "", featured: true },
+    { id: "brand-c", cat: "marketing", category: "F&D",      name: "BRAND C", tags: ["상세페이지"], cover: "", featured: true },
     { id: "yecheon-market", cat: "local", name: "LOCAL PROJECT", tags: ["인터뷰"], cover: "", featured: true }
   ],
 
