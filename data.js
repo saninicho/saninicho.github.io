@@ -17,7 +17,7 @@ window.SITE = {
   nameKo: "스튜디오 초록",
 
   /* 홈 첫 화면 큰 문구 (영어) */
-  headline: "Content for brands and places.",
+  headline: "All-Round Creative Studio",
 
   /* 홈 가운데 소개 */
   intro: {
